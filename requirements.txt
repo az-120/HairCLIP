@@ -1,0 +1,4 @@
+# List project dependencies here. Pin exact versions before submission, e.g.:
+# torch==2.2.0
+# torchvision==0.17.0
+# transformers==4.39.0
