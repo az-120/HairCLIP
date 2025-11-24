@@ -20,7 +20,7 @@ List every external dependency beyond the standard library. Include name, versio
 
 ## Pretrained Models
 
-- U2-Net models from https://github.com/xuebinqin/U-2-Net.
+- MediaPipe Image Segmenter model: https://ai.google.dev/edge/mediapipe/solutions/vision/image_segmenter
 
 ## Media & Assets
 
