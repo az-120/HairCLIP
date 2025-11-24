@@ -1,0 +1,67 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.dylib
+.cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.conda/
+.python-version
+
+# Packaging / build artifacts
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Logs and experiment runs
+logs/
+*.log
+wandb/
+mlruns/
+tensorboard/
+lightning_logs/
+
+# Notebooks
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Environment / secrets
+.env
+.env.*
+*.env
+
+# Data
+data/inputs/**
+data/outputs/**
+data/raw/**
+!data/.gitkeep
+
+# Models / large weights
+models/**
+!models/.gitkeep
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+
+# Videos / rendered assets
+videos/**
+!videos/.gitkeep
+
+# Caches for ML tooling
+torch_cache/
+torch_extensions/
+hf_cache/
+huggingface/
+transformers_cache/
