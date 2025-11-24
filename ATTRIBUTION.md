@@ -1,11 +1,12 @@
 # Attribution
 
-Use this document to provide complete credit for all resources used in HairCLIP. Update each subsection as development progresses.
+This document provides credit for all resources used in HairCLIP.
 
 ## AI Assistance
 
-- ❗ Describe any portions of the codebase generated or significantly modified by AI tools (e.g., ChatGPT, Copilot). Mention prompts and the files/sections impacted.
-- Template files (readme, attribution, setup)
+- Generating template files and initial structure of the project.
+- Updating the .gitignore file.
+- Adding docstrings to files.
 
 ## Third-Party Libraries
 
@@ -17,12 +18,10 @@ List every external dependency beyond the standard library. Include name, versio
 
 - ❗ Provide dataset names, sources/URLs, licenses, and whether you host a processed copy.
 
-## Pretrained Models or Checkpoints
+## Pretrained Models
 
-- ❗ Cite models such as StyleGAN, CLIP, etc. Include download locations and published papers.
+- U2-Net models from https://github.com/xuebinqin/U-2-Net.
 
 ## Media & Assets
 
 - ❗ Credit any icons, demo images, or video/audio assets included in `videos/` or elsewhere.
-
-Keeping this file accurate is required for final grading.
