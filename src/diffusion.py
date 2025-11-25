@@ -37,14 +37,4 @@ with torch.no_grad():
     )
 
 result = np.array(out.images[0])[:, :, ::-1]  # RGB → BGR for cv2
-# cv2.imwrite("data/test/diffusion.png", result)
-
-
-import matplotlib.pyplot as plt
-import cv2
-
-rgb = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
-
-plt.figure(figsize=(6,6))
-plt.imshow(rgb)
-plt.axis("off")
+cv2.imwrite("data/test/diffusion.png", result)
