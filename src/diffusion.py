@@ -14,7 +14,7 @@ pipe = AutoPipelineForInpainting.from_pretrained(
     variant="fp16"
 ).to("cuda")
 
-pipe.enable_xformers_memory_efficient_attention()
+# pipe.enable_xformers_memory_efficient_attention()
 
 # ----------------------------------------
 # 2. Load the original image (full resolution)
