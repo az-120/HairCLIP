@@ -48,8 +48,6 @@ data/raw/**
 !data/.gitkeep
 
 # Models / large weights
-models/**
-!models/.gitkeep
 *.ckpt
 *.pt
 *.pth
