@@ -17,7 +17,7 @@ pipe = AutoPipelineForInpainting.from_pretrained(
 bgr = cv2.imread("data/test/IMG_2817.png")
 
 if bgr is None:
-    raise ValueError("Image not found at data/test/IMG_2817.png")
+    raise ValueError("Image not found at data/test/test2.jpeg")
 
 # Convert to RGB for SDXL
 rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
@@ -46,7 +46,7 @@ cv2.imwrite("data/test/debug_mask_small.png", mask_small)
 image_pil = Image.fromarray(rgb_small)
 mask_pil = Image.fromarray(mask_small).convert("L")
 
-prompt = "asian man with buzz cut"
+prompt = "buzz cut"
 
 with torch.no_grad():
     out = pipe(
@@ -61,4 +61,4 @@ with torch.no_grad():
 result_pil = out.images[0]
 
 result_np = np.array(result_pil)[:, :, ::-1]
-cv2.imwrite("data/test/diffusion.png", result_np)
+cv2.imwrite("data/test/diffusion2.png", result_np)
