@@ -23,7 +23,7 @@ if bgr is None:
 rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
 
 mask_np_full = get_hair_mask(bgr)
-mask_np_full = get_editable_mask(bgr)
+# mask_np_full = get_editable_mask(bgr)
 
 # Ensure mask is single-channel
 if len(mask_np_full.shape) == 3:
@@ -41,7 +41,7 @@ target_size = (1024, 1024)
 rgb_small = cv2.resize(rgb, target_size, interpolation=cv2.INTER_AREA)
 mask_small = cv2.resize(mask_np_full, target_size, interpolation=cv2.INTER_NEAREST)
 
-cv2.imwrite("data/test/debug_mask_small.png", mask_small)
+cv2.imwrite("data/test/debug_mask_small.png", mask_small * 255)
 
 # Convert to PIL for diffusers
 image_pil = Image.fromarray(rgb_small)

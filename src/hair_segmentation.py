@@ -44,6 +44,7 @@ def get_hair_mask(image_bgr: np.ndarray) -> np.ndarray:
 
     return mask
 
+
 # Multiclass segmentation
 def get_multiclass_mask(image_bgr):
     mp_image = mp.Image(
@@ -70,12 +71,10 @@ def get_editable_mask(image_bgr):
 
 
 # Test
-# if __name__ == "__main__":
-#     image = cv2.imread("data/test/IMG_2817.png")
-#     mask = get_hair_mask(image)
+if __name__ == "__main__":
+    image = cv2.imread("data/test/IMG_2817.png")
 
-#     cv2.imwrite("data/test/2817_mask.png", mask * 255)
-#     img = cv2.imread("data/test/IMG_2817.png")
-#     mask = get_editable_mask(img)
-# 
-#     cv2.imwrite("data/test/multimask.png", mask * 255)
+    mask = get_hair_mask(image)
+    # mask = get_editable_mask(image)
+
+    cv2.imwrite("data/test/multimask.png", mask * 255)
