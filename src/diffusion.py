@@ -45,7 +45,7 @@ cv2.imwrite("data/test/debug_mask_small.png", mask_small)
 image_pil = Image.fromarray(rgb_small)
 mask_pil = Image.fromarray(mask_small).convert("L")
 
-prompt = "bald asian man"
+prompt = "A man with long wavy hair, shoulder length, realistic photography, same identity, same facial features."
 
 with torch.no_grad():
     out = pipe(
