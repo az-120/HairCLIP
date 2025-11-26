@@ -6,11 +6,11 @@ from diffusers import AutoPipelineForInpainting
 import matplotlib.pyplot as plt
 from hair_segmentation import get_editable_mask, get_hair_mask
 
-# pipe = AutoPipelineForInpainting.from_pretrained(
-#     "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
-#     torch_dtype=torch.float16,
-#     variant="fp16"
-# ).to("cuda")
+pipe = AutoPipelineForInpainting.from_pretrained(
+    "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
+    torch_dtype=torch.float16,
+    variant="fp16"
+).to("cuda")
 
 # pipe.enable_xformers_memory_efficient_attention() TODO: properly use this
 
@@ -40,23 +40,24 @@ mask_small = cv2.resize(mask_np_full, target_size, interpolation=cv2.INTER_NEARE
 
 cv2.imwrite("data/test/debug_mask_small.png", mask_small)
 
-# # Convert to PIL for diffusers
-# image_pil = Image.fromarray(rgb_small)
-# mask_pil = Image.fromarray(mask_small).convert("L")
 
-# prompt = "asian man with buzz cut"
+# Convert to PIL for diffusers
+image_pil = Image.fromarray(rgb_small)
+mask_pil = Image.fromarray(mask_small).convert("L")
 
-# with torch.no_grad():
-#     out = pipe(
-#         prompt=prompt,
-#         image=image_pil,
-#         mask_image=mask_pil,
-#         guidance_scale=7.5,
-#         num_inference_steps=20,
-#         strength=0.9
-#     )
+prompt = "bald asian man"
 
-# result_pil = out.images[0]
+with torch.no_grad():
+    out = pipe(
+        prompt=prompt,
+        image=image_pil,
+        mask_image=mask_pil,
+        guidance_scale=7.5,
+        num_inference_steps=20,
+        strength=0.9
+    )
 
-# result_np = np.array(result_pil)[:, :, ::-1]
-# cv2.imwrite("data/test/diffusion.png", result_np)
+result_pil = out.images[0]
+
+result_np = np.array(result_pil)[:, :, ::-1]
+cv2.imwrite("data/test/diffusion.png", result_np)
