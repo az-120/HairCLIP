@@ -6,8 +6,8 @@ from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
 ROOT = Path(__file__).resolve().parent.parent
-MODEL_PATH = ROOT / "models" / "hair_segmenter.tflite"
-# MODEL_PATH = ROOT / "models" / "selfie_multiclass.tflite"
+# MODEL_PATH = ROOT / "models" / "hair_segmenter.tflite"
+MODEL_PATH = ROOT / "models" / "selfie_multiclass.tflite"
 
 BaseOptions = python.BaseOptions
 VisionRunningMode = mp.tasks.vision.RunningMode
@@ -71,10 +71,10 @@ def get_editable_mask(image_bgr):
 
 
 # Test
-if __name__ == "__main__":
-    image = cv2.imread("data/test/IMG_2817.png")
+# if __name__ == "__main__":
+#     image = cv2.imread("data/test/IMG_2817.png")
 
-    mask = get_hair_mask(image)
-    # mask = get_editable_mask(image)
+#     # mask = get_hair_mask(image)
+#     mask = get_editable_mask(image)
 
-    cv2.imwrite("data/test/multimask.png", mask * 255)
+#     cv2.imwrite("data/test/multimask.png", mask * 255)

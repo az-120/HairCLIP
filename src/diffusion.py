@@ -27,11 +27,13 @@ mask_np_full = get_editable_mask(bgr)
 
 # Ensure mask is single-channel
 if len(mask_np_full.shape) == 3:
-    print('length thing')
     mask_np_full = mask_np_full[:, :, 0]
 
-# Convert to uint8 0–255 (should always .max() <= 1 based on func)
-mask_np_full = (mask_np_full * 255).astype(np.uint8)
+# Convert to uint8 0–255 if needed
+if mask_np_full.max() <= 1:
+    mask_np_full = (mask_np_full * 255).astype(np.uint8)
+else:
+    mask_np_full = mask_np_full.astype(np.uint8)
 
 target_size = (1024, 1024)
 
@@ -39,7 +41,6 @@ rgb_small = cv2.resize(rgb, target_size, interpolation=cv2.INTER_AREA)
 mask_small = cv2.resize(mask_np_full, target_size, interpolation=cv2.INTER_NEAREST)
 
 cv2.imwrite("data/test/debug_mask_small.png", mask_small)
-
 
 # Convert to PIL for diffusers
 image_pil = Image.fromarray(rgb_small)
