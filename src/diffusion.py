@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 from diffusers import AutoPipelineForInpainting
 import matplotlib.pyplot as plt
-from hair_segmentation import get_editable_mask
+from hair_segmentation import get_editable_mask, get_hair_mask
 
 pipe = AutoPipelineForInpainting.from_pretrained(
     "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
