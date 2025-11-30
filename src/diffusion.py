@@ -22,8 +22,8 @@ if bgr is None:
 # Convert to RGB for SDXL
 rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
 
-mask_np_full = get_hair_mask(bgr)
-# mask_np_full = get_editable_mask(bgr)
+# mask_np_full = get_hair_mask(bgr)
+mask_np_full = get_editable_mask(bgr)
 
 # Ensure mask is single-channel
 if len(mask_np_full.shape) == 3:
