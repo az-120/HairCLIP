@@ -28,7 +28,7 @@ def expand_mask(mask, amount=40):
     expanded = cv2.dilate(mask, kernel, iterations=1)
     return expanded
 
-def smooth_expand(mask, iterations=5, step=10):
+def smooth_expand(mask, iterations=10, step=100):
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (step, step))
     expanded = mask.copy()
     for _ in range(iterations):
