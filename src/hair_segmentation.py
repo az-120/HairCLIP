@@ -6,8 +6,8 @@ from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
 ROOT = Path(__file__).resolve().parent.parent
-# MODEL_PATH = ROOT / "models" / "hair_segmenter.tflite"
-MODEL_PATH = ROOT / "models" / "selfie_multiclass.tflite"
+MODEL_PATH = ROOT / "models" / "hair_segmenter.tflite"
+# MODEL_PATH = ROOT / "models" / "selfie_multiclass.tflite"
 
 BaseOptions = python.BaseOptions
 VisionRunningMode = mp.tasks.vision.RunningMode
@@ -23,8 +23,17 @@ segmenter = vision.ImageSegmenter.create_from_options(options)
 
 # Just hair segmentation
 def expand_mask(mask, amount=40):
-    kernel = np.ones((amount, amount), np.uint8)
-    return cv2.dilate(mask, kernel, iterations=1)
+    radius = amount // 2
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (radius, radius))
+    expanded = cv2.dilate(mask, kernel, iterations=1)
+    return expanded
+
+def smooth_expand(mask, iterations=5, step=10):
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (step, step))
+    expanded = mask.copy()
+    for _ in range(iterations):
+        expanded = cv2.dilate(expanded, kernel, iterations=1)
+    return expanded
 
 def get_hair_mask(image_bgr: np.ndarray) -> np.ndarray:
     """
@@ -40,7 +49,7 @@ def get_hair_mask(image_bgr: np.ndarray) -> np.ndarray:
 
     mask = (mask > 0.5).astype(np.uint8)
 
-    mask = expand_mask(mask)
+    mask = smooth_expand(mask)
 
     return mask
 
@@ -71,10 +80,10 @@ def get_editable_mask(image_bgr):
 
 
 # Test
-# if __name__ == "__main__":
-#     image = cv2.imread("data/test/IMG_2817.png")
+if __name__ == "__main__":
+    image = cv2.imread("data/test/IMG_2817.png")
 
-#     # mask = get_hair_mask(image)
-#     mask = get_editable_mask(image)
+    mask = get_hair_mask(image)
+    # mask = get_editable_mask(image)
 
-#     cv2.imwrite("data/test/multimask.png", mask * 255)
+    cv2.imwrite("data/test/multimask.png", mask * 255)

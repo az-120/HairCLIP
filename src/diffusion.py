@@ -22,8 +22,8 @@ if bgr is None:
 # Convert to RGB for SDXL
 rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
 
-# mask_np_full = get_hair_mask(bgr)
-mask_np_full = get_editable_mask(bgr)
+mask_np_full = get_hair_mask(bgr)
+# mask_np_full = get_editable_mask(bgr)
 
 # Ensure mask is single-channel
 if len(mask_np_full.shape) == 3:
@@ -46,7 +46,7 @@ cv2.imwrite("data/test/debug_mask_small.png", mask_small)
 image_pil = Image.fromarray(rgb_small)
 mask_pil = Image.fromarray(mask_small).convert("L")
 
-prompt = "A man with long wavy hair, shoulder length, realistic photography, same identity, same facial features, same background, background unchanged"
+prompt = "A man with long wavy hair reaching the shoulders, realistic photography, same background, same face, same identity, natural hair texture."
 
 with torch.no_grad():
     out = pipe(
