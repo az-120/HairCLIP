@@ -3,8 +3,7 @@ from PIL import Image
 import numpy as np
 import cv2
 from diffusers import AutoPipelineForInpainting
-import matplotlib.pyplot as plt
-from hair_segmentation import get_editable_mask
+from masking import get_editable_mask
 
 pipe = AutoPipelineForInpainting.from_pretrained(
     "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
@@ -46,7 +45,7 @@ cv2.imwrite("data/test/debug_mask_small.png", mask_small)
 image_pil = Image.fromarray(rgb_small)
 mask_pil = Image.fromarray(mask_small).convert("L")
 
-prompt = "asian man with buzz cut"
+prompt = "A man with long wavy hair reaching the shoulders, realistic photography, same background, same face, same identity, natural hair texture."
 
 with torch.no_grad():
     out = pipe(
