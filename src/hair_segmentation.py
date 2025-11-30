@@ -6,8 +6,8 @@ from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
 ROOT = Path(__file__).resolve().parent.parent
-MODEL_PATH = ROOT / "models" / "hair_segmenter.tflite"
-# MODEL_PATH = ROOT / "models" / "selfie_multiclass.tflite"
+# MODEL_PATH = ROOT / "models" / "hair_segmenter.tflite"
+MODEL_PATH = ROOT / "models" / "selfie_multiclass.tflite"
 
 BaseOptions = python.BaseOptions
 VisionRunningMode = mp.tasks.vision.RunningMode
@@ -63,27 +63,71 @@ def get_multiclass_mask(image_bgr):
     result = segmenter.segment(mp_image)
     return result.category_mask.numpy_view()  # shape (H, W) integers 0–5
 
-def get_editable_mask(image_bgr):
+def expand_downward(mask, pixels):
+    h, w = mask.shape
+    expanded = mask.copy()
+
+    # For each row, OR it with shifted version below
+    for i in range(1, pixels):
+        shifted = np.roll(mask, shift=i, axis=0)   # shift downward
+        shifted[:i, :] = 0                         # zero out wrap-around
+        expanded = np.logical_or(expanded, shifted)
+
+    return expanded.astype(np.uint8)
+
+def get_editable_mask(image_bgr, expand_px=200):
+    """
+    Returns a binary inpainting mask where:
+      1 = editable region (hair + expanded region)
+      0 = protected region (face, skin, clothes, etc.)
+
+    expand_px controls how far hair is allowed to 'grow'
+    (use higher values for long hair prompts).
+    """
+
     cls_mask = get_multiclass_mask(image_bgr)
 
-    # 0-background, 1-hair, 2-body skin, 3-face, 4-clothes, 5-accessories
+    hair = (cls_mask == 1).astype(np.uint8)
+    face = (cls_mask == 3).astype(np.uint8)
+    body = (cls_mask == 2).astype(np.uint8)
 
-    editable_classes = [0, 1, 5]  # TODO: find what works best
+    # 1. Standard elliptical dilation (for width + top)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (expand_px, expand_px))
+    dilated = cv2.dilate(hair, kernel, iterations=1)
 
-    editable = np.isin(cls_mask, editable_classes).astype(np.uint8)
-    protected = np.isin(cls_mask, [3]).astype(np.uint8)  # face-skin
+    # 2. Downward expansion for long hair
+    downward = expand_downward(hair, 1500)
 
-    final_mask = editable.copy()
-    final_mask[protected == 1] = 0
+    # 3. Combine
+    expanded = np.logical_or(dilated, downward).astype(np.uint8)
 
-    return final_mask
+    # 4. Remove protected regions
+    protected = (face | body).astype(np.uint8)
+    expanded[protected == 1] = 0
+
+    return expanded.astype(np.uint8)
+
+# def get_editable_mask(image_bgr):
+#     cls_mask = get_multiclass_mask(image_bgr)
+
+#     # 0-background, 1-hair, 2-body skin, 3-face, 4-clothes, 5-accessories
+
+#     editable_classes = [0, 1, 5]  # TODO: find what works best
+
+#     editable = np.isin(cls_mask, editable_classes).astype(np.uint8)
+#     protected = np.isin(cls_mask, [3]).astype(np.uint8)  # face-skin
+
+#     final_mask = editable.copy()
+#     final_mask[protected == 1] = 0
+
+#     return final_mask
 
 
 # Test
 if __name__ == "__main__":
     image = cv2.imread("data/test/IMG_2817.png")
 
-    mask = get_hair_mask(image)
-    # mask = get_editable_mask(image)
+    # mask = get_hair_mask(image)
+    mask = get_editable_mask(image)
 
     cv2.imwrite("data/test/multimask.png", mask * 255)
