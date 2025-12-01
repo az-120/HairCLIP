@@ -46,7 +46,7 @@ image_pil = Image.fromarray(rgb_small)
 mask_pil = Image.fromarray(mask_small).convert("L")
 
 prompts = [
-    "blonde short hair",
+    "man with blonde short hair",
     "long kinky hair",
     "side part haircut",
     "haircut",
@@ -62,7 +62,7 @@ with torch.no_grad():
             mask_image=mask_pil,
             guidance_scale=12,
             num_inference_steps=20,
-            strength=0.1
+            strength=1
         )
 
         result_pil = out.images[0]
