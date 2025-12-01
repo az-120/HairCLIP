@@ -46,11 +46,12 @@ image_pil = Image.fromarray(rgb_small)
 mask_pil = Image.fromarray(mask_small).convert("L")
 
 prompts = [
-    "A man with a clean buzzcut, realistic photography.",
-    "A man with a full afro hairstyle, realistic photography.",
-    "A man with short cropped hair, realistic photography.",
-    "A man with medium-length wavy hair, realistic photography.",
-    "A man with long straight hair past the shoulders, realistic photography."
+    "blonde short hair",
+    "long kinky hair",
+    "side part haircut",
+    "haircut",
+    "man with braids",
+    "woman with ponytail"
 ]
 
 with torch.no_grad():
