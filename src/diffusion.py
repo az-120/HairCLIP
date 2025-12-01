@@ -45,21 +45,6 @@ cv2.imwrite("data/test/debug_mask_small.png", mask_small)
 image_pil = Image.fromarray(rgb_small)
 mask_pil = Image.fromarray(mask_small).convert("L")
 
-with torch.no_grad():
-    image_latents = pipe.vae.encode(pipe.feature_extractor(image_pil, return_tensors="pt").pixel_values.to("cuda")).latent_dist.sample()
-
-# Convert mask to torch tensor (1=keep, 0=replace)
-mask_tensor = torch.tensor(np.array(mask_pil)/255.0, device="cuda").unsqueeze(0).unsqueeze(0).float()
-
-# Sample noise for masked region
-noise_latents = torch.randn_like(image_latents)
-
-# Scale original latent influence
-alpha = 0.3  # Reduce original image influence
-masked_latents = mask_tensor * image_latents * alpha + (1 - mask_tensor) * noise_latents
-
-generator = torch.Generator(device="cuda").manual_seed(0)
-
 prompts = [
     "man with blonde short hair",
     "long kinky hair",
@@ -73,12 +58,11 @@ with torch.no_grad():
     for idx, prompt in enumerate(prompts, start=1):
         out = pipe(
             prompt=prompt,
-            latents=masked_latents,
+            image=image_pil,
             mask_image=mask_pil,
-            guidance_scale=10,
+            guidance_scale=8,
             num_inference_steps=20,
-            strength=0.9,
-            generator=generator,
+            strength=0.999
         )
 
         result_pil = out.images[0]
