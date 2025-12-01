@@ -33,10 +33,8 @@ prompt = "a portrait photo of the same person with short blonde hair, cinematic 
 # 5. Generate pre-edit (big global changes)
 out = ip_adapter(
     prompt=prompt,
-    image=init_image,          # ← use the original image as conditioning
-    num_inference_steps=30,
-    guidance_scale=5.0,
-    strength=0.7,              # controls how far from original image to move
+    ip_adapter_image=init_image,          # ← use the original image as conditioning
+    negative_prompt="deformed, ugly, wrong proportion, low res, bad anatomy, worst quality, low quality",
 )
 
 res = out.images[0]
