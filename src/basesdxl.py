@@ -24,7 +24,7 @@ ip_adapter.load_ip_adapter(
 ip_adapter.set_ip_adapter_scale(0.8)
 
 # 3. Load your original image
-init_image = Image.open("data/test/IMG_2817.PNG").convert("RGB")
+init_image = Image.open("data/test/IMG_2817.png").convert("RGB")
 init_image = init_image.resize((1024, 1024))
 
 # 4. Prompt for drastic edit
@@ -39,5 +39,5 @@ out = ip_adapter(
     strength=0.7,              # controls how far from original image to move
 )
 
-res = out.images[0].save("pre_edit_output.png")
+res = out.images[0]
 cv2.imwrite("data/test/nomaskres.png", res)
