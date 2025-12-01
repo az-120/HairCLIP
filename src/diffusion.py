@@ -62,7 +62,7 @@ with torch.no_grad():
             mask_image=mask_pil,
             guidance_scale=12,
             num_inference_steps=20,
-            strength=0.9
+            strength=0.1
         )
 
         result_pil = out.images[0]
