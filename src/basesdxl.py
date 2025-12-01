@@ -31,11 +31,10 @@ init_image = init_image.resize((1024, 1024))
 prompt = "a portrait photo of the same person with short blonde hair, cinematic lighting"
 
 # 5. Generate pre-edit (big global changes)
-out = ip_adapter(
+images = ip_adapter(
     prompt=prompt,
     ip_adapter_image=init_image,          # ← use the original image as conditioning
     negative_prompt="deformed, ugly, wrong proportion, low res, bad anatomy, worst quality, low quality",
 )
 
-res = out.images[0]
-cv2.imwrite("data/test/nomaskres.png", res)
+images[0].save("pre_edit_output.png")
