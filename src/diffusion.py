@@ -52,7 +52,7 @@ with torch.no_grad():
         prompt=prompt,
         image=image_pil,
         mask_image=mask_pil,
-        guidance_scale=7.5,
+        guidance_scale=15,
         num_inference_steps=20,
         strength=0.9
     )
