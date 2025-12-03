@@ -100,6 +100,8 @@ if __name__ == "__main__":
     bgr = cv2.imread("data/test/IMG_2817.png")
     mask = get_editable_mask(bgr)
 
+    cv2.imwrite("data/test/mask_debug.png", mask)
+
     prompts = [
         "buzzcut",
         "buzzcut haircut",
