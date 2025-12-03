@@ -90,9 +90,6 @@ def run_diffusion(
     result_np = np.array(result_pil)
     result_bgr = result_np[:, :, ::-1]
 
-    h, w = orig_bgr.shape[:2]
-    result_bgr = cv2.resize(result_bgr, (w, h), interpolation=cv2.INTER_LANCZOS4)
-
     return result_bgr
 
 

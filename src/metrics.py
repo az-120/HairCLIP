@@ -1,3 +1,4 @@
+import cv2
 import numpy as np
 from PIL import Image
 from transformers import CLIPProcessor, CLIPModel
@@ -32,6 +33,15 @@ def prompt_score(image, prompt):
 
 # Locality Score
 def locality_score(orig, edited, mask):
-    inv = 1 - mask
-    diff = ((orig - edited) * inv[..., None]) ** 2
+    H, W = edited.shape[:2]
+
+    orig_resized = cv2.resize(orig, (W, H), interpolation=cv2.INTER_AREA)
+    mask_resized = cv2.resize(mask, (W, H), interpolation=cv2.INTER_NEAREST)
+
+    if mask_resized.max() > 1:
+        mask_resized = mask_resized.astype(np.float32) / 255.0
+
+    inv = 1 - mask_resized
+
+    diff = ((orig_resized - edited) * inv[..., None]) ** 2
     return float(1.0 / (1.0 + diff.mean()))
