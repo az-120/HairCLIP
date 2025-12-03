@@ -46,15 +46,18 @@ image_pil = Image.fromarray(rgb_small)
 mask_pil = Image.fromarray(mask_small).convert("L")
 
 prompts = [
-    "man with blonde short hair",
-    "long kinky hair",
-    "side part haircut",
-    "photo of a person with a buzzcut hairstyle, high quality, realistic, detailed, blend background",
-    "man with braids",
-    "woman with ponytail",
-    "man with manbun",
-    "picture of a man with short buzz cut",
-    "selfie of a man with a buzzcut"
+    "buzzcut",
+    "buzzcut hairstyle",
+    "buzzcut haircut",
+    "photo of a person with a buzzcut hairstyle, high quality, realistic, detailed",
+    "buzzcut hairstyle, short hair, no bangs, shaved sides",
+    "picture of a person with a buzzcut",
+    "portrait photo headshot of a person with a short, buzz cut hairstyle",
+    "selfie of a person with a buzzed head, shaved, realistic, human like",
+    "dreads",
+    "man with dreads",
+    "dreads twists hair style",
+    "waves hairstyle"
 ]
 
 with torch.no_grad():
@@ -63,9 +66,9 @@ with torch.no_grad():
             prompt=prompt,
             image=image_pil,
             mask_image=mask_pil,
-            guidance_scale=15,
+            guidance_scale=12,
             num_inference_steps=20,
-            strength=0.999
+            strength=0.99999
         )
 
         result_pil = out.images[0]
