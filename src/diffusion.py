@@ -45,19 +45,26 @@ cv2.imwrite("data/test/debug_mask_small.png", mask_small)
 image_pil = Image.fromarray(rgb_small)
 mask_pil = Image.fromarray(mask_small).convert("L")
 
-prompt = "A man with long wavy hair reaching the shoulders, realistic photography, same background, same face, same identity, natural hair texture."
+prompts = [
+    "buzzcut",
+    "buzzcut haircut",
+    "photo of a person with a buzzcut hairstyle, high quality, realistic, detailed",
+    "buzzcut hairstyle, short hair, no bangs, shaved sides",
+    "portrait photo headshot of a person with a short, buzz cut hairstyle",
+    "selfie of a person with a buzzed head, shaved, realistic, human like",
+]
 
 with torch.no_grad():
-    out = pipe(
-        prompt=prompt,
-        image=image_pil,
-        mask_image=mask_pil,
-        guidance_scale=7.5,
-        num_inference_steps=20,
-        strength=0.9
-    )
+    for idx, prompt in enumerate(prompts, start=1):
+        out = pipe(
+            prompt=prompt,
+            image=image_pil,
+            mask_image=mask_pil,
+            guidance_scale=12,
+            num_inference_steps=20,
+            strength=0.99999
+        )
 
-result_pil = out.images[0]
-
-result_np = np.array(result_pil)[:, :, ::-1]
-cv2.imwrite("data/test/diffusion.png", result_np)
+        result_pil = out.images[0]
+        result_np = np.array(result_pil)[:, :, ::-1]
+        cv2.imwrite(f"data/test/diffusion_{idx}.png", result_np)
