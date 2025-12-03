@@ -111,8 +111,8 @@ if __name__ == "__main__":
             orig_bgr=bgr,
             mask=mask,
             prompt=pr,
-            guidance_scale=12,
-            strength=0.7,
-            num_inference_steps=35
+            guidance_scale=11,
+            strength=0.99999,
+            num_inference_steps=30
         )
         cv2.imwrite(f"data/test/output_{i}.png", out_bgr)
