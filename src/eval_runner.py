@@ -10,7 +10,7 @@ strength_grid  = [0.5, 0.7, 0.9, 0.99999]
 steps_grid     = [20, 35, 50]
 
 dataset = [
-    ("data/test/IMG_2817.png", "buzzcut hairstyle"),
+    ("data/test/IMG_2817.png", "photo of a person with a buzzcut hairstyle"),
     # ("data/test/IMG_2817.png", "medium wavy hair"),
     # ("data/test/IMG_2817.png", "long flowy hair"),
     # ("data/test/matthew.png", "buzzcut hairstyle"),

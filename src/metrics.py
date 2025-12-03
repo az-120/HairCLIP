@@ -1,11 +1,11 @@
 import cv2
+import insightface
 import numpy as np
 from PIL import Image
 from transformers import CLIPProcessor, CLIPModel
 
 
 # Identity Score
-import insightface
 arcface_model = insightface.app.FaceAnalysis(name="buffalo_s")
 arcface_model.prepare(ctx_id=0)
 

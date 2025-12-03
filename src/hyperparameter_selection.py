@@ -9,11 +9,11 @@ def compute_best_hparams(
     guidance_col: str = "guidance",
     strength_col: str = "strength",
     steps_col: str = "steps",
-    w_id: float = 1.0,
-    w_prompt: float = 10.0,
-    w_loc: float = 1.0,
+    w_id: float = 0.08,
+    w_prompt: float = 0.82,
+    w_loc: float = 0.10,
 ):
-    df = pd.read_csv("hyperparameters.csv")
+    df = pd.read_csv("hyperparameters2.csv")
 
     cols_needed = [
         guidance_col, strength_col, steps_col,
