@@ -111,7 +111,7 @@ if __name__ == "__main__":
             orig_bgr=bgr,
             mask=mask,
             prompt=pr,
-            guidance_scale=11,
+            guidance_scale=8,
             strength=0.99999,
             num_inference_steps=30
         )
