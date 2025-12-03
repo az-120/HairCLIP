@@ -58,7 +58,7 @@ def get_editable_mask(image_bgr, expand_px=200):
 
     # Subtract out the face & body, maybe TODO: determine best protected areas
     # Slightly erode face mask to account for hair falling on face
-    face_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (100, 100))
+    face_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (50, 50))
     shrunken_face = cv2.erode(face, face_kernel, iterations=1)
 
     protected = (shrunken_face | body).astype(np.uint8)
