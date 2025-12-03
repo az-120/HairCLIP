@@ -15,7 +15,7 @@ dataset = [
     ("data/test/IMG_2817.png", "long flowy hair"),
     ("data/test/matthew.png", "buzzcut hairstyle"),
     ("data/test/matthew.png", "long curly hair"),
-    ("data/test/matthew.png", "wavy hair")
+    ("data/test/matthew.png", "wavy hair"),
     ("data/test/stockportrait.png", "very short hair"),
     ("data/test/stockportrait.png", "red hair"),
     ("data/test/stockportrait.png", "long straigh hair"),
