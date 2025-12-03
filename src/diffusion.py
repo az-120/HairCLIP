@@ -49,12 +49,12 @@ prompts = [
     "man with blonde short hair",
     "long kinky hair",
     "side part haircut",
-    "haircut",
+    "photo of a person with a buzzcut hairstyle, high quality, realistic, detailed, blend background",
     "man with braids",
     "woman with ponytail",
     "man with manbun",
-    "man with short buzz cut",
-    "buzz cut"
+    "picture of a man with short buzz cut",
+    "selfie of a man with a buzzcut"
 ]
 
 with torch.no_grad():
