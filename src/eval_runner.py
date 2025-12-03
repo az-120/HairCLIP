@@ -5,20 +5,20 @@ from masking import get_editable_mask
 from metrics import identity_score, prompt_score, locality_score
 
 # Grid
-guidance_grid = [5, 7.5, 10, 12, 15]
-strength_grid  = [0.3, 0.5, 0.7]
-steps_grid     = [20, 30]
+guidance_grid = [5, 8.5, 12]
+strength_grid  = [0.5, 0.7, 0.9, 0.99999]
+steps_grid     = [20, 35, 50]
 
 dataset = [
     ("data/test/IMG_2817.png", "buzzcut hairstyle"),
-    ("data/test/IMG_2817.png", "medium wavy hair"),
-    ("data/test/IMG_2817.png", "long flowy hair"),
-    ("data/test/matthew.png", "buzzcut hairstyle"),
-    ("data/test/matthew.png", "long curly hair"),
-    ("data/test/matthew.png", "wavy hair"),
-    ("data/test/stockportrait.png", "very short hair"),
-    ("data/test/stockportrait.png", "red hair"),
-    ("data/test/stockportrait.png", "long straigh hair"),
+    # ("data/test/IMG_2817.png", "medium wavy hair"),
+    # ("data/test/IMG_2817.png", "long flowy hair"),
+    # ("data/test/matthew.png", "buzzcut hairstyle"),
+    # ("data/test/matthew.png", "long curly hair"),
+    # ("data/test/matthew.png", "wavy hair"),
+    # ("data/test/stockportrait.png", "very short hair"),
+    # ("data/test/stockportrait.png", "red hair"),
+    # ("data/test/stockportrait.png", "long straigh hair"),
 ]
 
 with open("results.csv", "w") as f:
