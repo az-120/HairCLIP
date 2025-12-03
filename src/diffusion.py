@@ -13,7 +13,7 @@ pipe = AutoPipelineForInpainting.from_pretrained(
 
 # pipe.enable_xformers_memory_efficient_attention() TODO: properly use this
 
-bgr = cv2.imread("data/test/IMG_2817.png")
+bgr = cv2.imread("data/test/paolo.png")
 
 if bgr is None:
     raise ValueError("Image not found at data/test/IMG_2817.png")
