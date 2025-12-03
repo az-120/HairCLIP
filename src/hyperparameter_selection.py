@@ -13,7 +13,7 @@ def compute_best_hparams(
     w_prompt: float = 0.82,
     w_loc: float = 0.10,
 ):
-    df = pd.read_csv("hyperparameters2.csv")
+    df = pd.read_csv("hyperparameters3.csv")
 
     cols_needed = [
         guidance_col, strength_col, steps_col,
