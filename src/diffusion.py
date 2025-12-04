@@ -103,7 +103,9 @@ if __name__ == "__main__":
     cv2.imwrite("data/test/mask_debug.png", mask)
 
     prompts = [
-        "buzzcut",
+        "low taper fade",
+        "low taper",
+        "high taper fade",
         "buzzcut haircut",
         "photo of a person with a buzzcut hairstyle, high quality, realistic, detailed",
     ]
@@ -118,3 +120,28 @@ if __name__ == "__main__":
             num_inference_steps=30
         )
         cv2.imwrite(f"data/test/output_{i}.png", out_bgr)
+
+
+    bgr = cv2.imread("data/test/stockportrait.png")
+    mask = get_editable_mask(bgr)
+
+    cv2.imwrite("data/test/mask_debug2.png", mask)
+
+    prompts = [
+        "low taper fade",
+        "low taper",
+        "high taper fade",
+        "buzzcut haircut",
+        "photo of a person with a buzzcut hairstyle, high quality, realistic, detailed",
+    ]
+
+    for i, pr in enumerate(prompts, 1):
+        out_bgr = run_diffusion(
+            orig_bgr=bgr,
+            mask=mask,
+            prompt=pr,
+            guidance_scale=8,
+            strength=0.99999,
+            num_inference_steps=30
+        )
+        cv2.imwrite(f"data/test/output2_{i}.png", out_bgr)
