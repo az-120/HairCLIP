@@ -69,7 +69,7 @@ def get_editable_mask(image_bgr, expand_px=200):
 
 # Test
 if __name__ == "__main__":
-    img = cv2.imread("data/test/IMG_2817.png")
+    img = cv2.imread("data/test/headshotclip.jpg")
     mask = get_editable_mask(img)
 
     cv2.imwrite("data/test/multimask.png", mask * 255)
