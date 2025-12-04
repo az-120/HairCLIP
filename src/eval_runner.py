@@ -5,20 +5,44 @@ from masking import get_editable_mask
 from metrics import identity_score, prompt_score, locality_score
 
 # Grid
-guidance_grid = [5, 8.5, 12]
-strength_grid  = [0.5, 0.7, 0.9, 0.99999]
-steps_grid     = [20, 35, 50]
+# guidance_grid = [5, 8.5, 12]
+# strength_grid  = [0.5, 0.7, 0.9, 0.99999]
+# steps_grid     = [20, 35, 50]
+
+# dataset = [
+#     ("data/test/headshotclip.jpg", "photo of a person with a buzzcut hairstyle"),
+#     # ("data/test/headshotclip.jpg", "medium wavy hair"),
+#     # ("data/test/headshotclip.jpg", "long flowy hair"),
+#     # ("data/test/matthew.png", "buzzcut hairstyle"),
+#     # ("data/test/matthew.png", "long curly hair"),
+#     # ("data/test/matthew.png", "wavy hair"),
+#     # ("data/test/stockportrait.png", "very short hair"),
+#     # ("data/test/stockportrait.png", "red hair"),
+#     # ("data/test/stockportrait.png", "long straigh hair"),
+# ]
+#
+# For Prompt Evaluations:
+guidance_grid = [10]
+strength_grid  = [0.99999]
+steps_grid     = [30]
 
 dataset = [
-    ("data/test/IMG_2817.png", "photo of a person with a buzzcut hairstyle"),
-    # ("data/test/IMG_2817.png", "medium wavy hair"),
-    # ("data/test/IMG_2817.png", "long flowy hair"),
-    # ("data/test/matthew.png", "buzzcut hairstyle"),
-    # ("data/test/matthew.png", "long curly hair"),
-    # ("data/test/matthew.png", "wavy hair"),
-    # ("data/test/stockportrait.png", "very short hair"),
-    # ("data/test/stockportrait.png", "red hair"),
-    # ("data/test/stockportrait.png", "long straigh hair"),
+    ("data/test/headshotclip.jpg", "buzzcut"),
+    ("data/test/headshotclip.jpg", "buzzcut hairstyle"),
+    ("data/test/headshotclip.jpg", "person with a buzzcut"),
+    ("data/test/headshotclip.jpg", "photo of a person with a buzzcut hairstyle"),
+    ("data/test/headshotclip.jpg", "portrait of a person with a buzzcut hairstyle"),
+    ("data/test/headshotclip.jpg", "realistic person with a clean buzzcut hairstyle"),
+    ("data/test/headshotclip.jpg", "close-up portrait of a person with a buzzcut haircut"),
+    ("data/test/headshotclip.jpg", "high-detail portrait of a person with a buzzcut hairstyle, realistic skin texture"),
+    ("data/test/headshotclip.jpg", "studio photo of a person with a sharp buzzcut haircut, dramatic lighting"),
+    ("data/test/headshotclip.jpg", "ultra-realistic photo of a person with a very short buzzcut"),
+    ("data/test/headshotclip.jpg", "cinematic portrait of a person with a buzzcut, shallow depth of field"),
+    ("data/test/headshotclip.jpg", "person with freshly-trimmed buzzcut hair in natural lighting"),
+    ("data/test/headshotclip.jpg", "The person in the image should now have a short buzzcut hairstyle."),
+    ("data/test/headshotclip.jpg", "Transform the subject’s hair into a clean buzzcut while keeping facial features unchanged."),
+    ("data/test/headshotclip.jpg", "Render the person with a natural-looking buzzcut haircut in a realistic photographic style."),
+    ("data/test/headshotclip.jpg", "Change the subject's hairstyle to a buzzcut, ensuring the new hair matches lighting, background, and perspective."),
 ]
 
 with open("results.csv", "w") as f:

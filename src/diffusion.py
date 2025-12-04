@@ -12,7 +12,7 @@ def load_model(device="cuda"):
         variant="fp16"
     ).to(device)
 
-    # TODO: pipe.enable_xformers_memory_efficient_attention()
+    pipe.enable_xformers_memory_efficient_attention()
     return pipe
 
 
@@ -97,15 +97,28 @@ def run_diffusion(
 if __name__ == "__main__":
     from masking import get_editable_mask
 
-    bgr = cv2.imread("data/test/IMG_2817.png")
+    bgr = cv2.imread("data/test/headshotclip.jpg")
     mask = get_editable_mask(bgr)
 
-    cv2.imwrite("data/test/mask_debug.png", mask)
+    cv2.imwrite("data/test/mask_debug.png", mask * 255)
 
     prompts = [
         "buzzcut",
-        "buzzcut haircut",
-        "photo of a person with a buzzcut hairstyle, high quality, realistic, detailed",
+        "buzzcut hairstyle",
+        "person with a buzzcut",
+        "photo of a person with a buzzcut hairstyle",
+        "portrait of a person with a buzzcut hairstyle",
+        "realistic person with a clean buzzcut hairstyle",
+        "close-up portrait of a person with a buzzcut haircut",
+        "high-detail portrait of a person with a buzzcut hairstyle, realistic skin texture",
+        "studio photo of a person with a sharp buzzcut haircut, dramatic lighting",
+        "ultra-realistic photo of a person with a very short buzzcut",
+        "cinematic portrait of a person with a buzzcut, shallow depth of field",
+        "person with freshly-trimmed buzzcut hair in natural lighting",
+        "The person in the image should now have a short buzzcut hairstyle.",
+        "Transform the subject’s hair into a clean buzzcut while keeping facial features unchanged.",
+        "Render the person with a natural-looking buzzcut haircut in a realistic photographic style.",
+        "Change the subject's hairstyle to a buzzcut, ensuring the new hair matches lighting, background, and perspective.",
     ]
 
     for i, pr in enumerate(prompts, 1):
@@ -113,7 +126,7 @@ if __name__ == "__main__":
             orig_bgr=bgr,
             mask=mask,
             prompt=pr,
-            guidance_scale=8,
+            guidance_scale=10,
             strength=0.99999,
             num_inference_steps=30
         )

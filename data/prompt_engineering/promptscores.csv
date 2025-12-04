@@ -1,0 +1,17 @@
+image,prompt,guidance,strength,steps,identity,prompt_sim,locality,total
+data/test/headshotclip.jpg,buzzcut,10,0.99999,30,0.5499083995819090,0.19770054519176500,0.05948926452146270,0.807098209295137
+data/test/headshotclip.jpg,buzzcut hairstyle,10,0.99999,30,0.5816882848739620,0.16242168843746200,0.02371625768128080,0.767826230992705
+data/test/headshotclip.jpg,person with a buzzcut,10,0.99999,30,0.6378448009490970,0.21172039210796400,0.09652721747498680,0.946092410532048
+data/test/headshotclip.jpg,photo of a person with a buzzcut hairstyle,10,0.99999,30,0.5978646874427800,0.2204403132200240,0.08026208218455840,0.898567082847362
+data/test/headshotclip.jpg,portrait of a person with a buzzcut hairstyle,10,0.99999,30,0.669312596321106,0.19832752645015700,0.04241362139139740,0.91005374416266
+data/test/headshotclip.jpg,realistic person with a clean buzzcut hairstyle,10,0.99999,30,0.5311429500579830,0.2261262685060500,0.06936106628245630,0.826630284846489
+data/test/headshotclip.jpg,close-up portrait of a person with a buzzcut haircut,10,0.99999,30,0.6511545181274410,0.19115117192268400,0.07310923485035100,0.915414924900476
+data/test/headshotclip.jpg,"high-detail portrait of a person with a buzzcut hairstyle, realistic skin texture",10,0.99999,30,0.6440993547439580,0.1945030242204670,0.06514929819689010,0.903751677161315
+data/test/headshotclip.jpg,"studio photo of a person with a sharp buzzcut haircut, dramatic lighting",10,0.99999,30,0.6220718026161190,0.2112855315208440,0.10050126865867900,0.933858602795642
+data/test/headshotclip.jpg,ultra-realistic photo of a person with a very short buzzcut,10,0.99999,30,0.6503651142120360,0.24283981323242200,0.08911244152375620,0.982317368968214
+data/test/headshotclip.jpg,"cinematic portrait of a person with a buzzcut, shallow depth of field",10,0.99999,30,0.577785849571228,0.19396741688251500,0.09611815011500500,0.867871416568748
+data/test/headshotclip.jpg,person with freshly-trimmed buzzcut hair in natural lighting,10,0.99999,30,0.5532214045524600,0.20935514569282500,0.03923480916907220,0.801811359414357
+data/test/headshotclip.jpg,The person in the image should now have a short buzzcut hairstyle.,10,0.99999,30,0.6749743223190310,0.19366811215877500,0.03581038054881500,0.904452815026621
+data/test/headshotclip.jpg,Transform the subject’s hair into a clean buzzcut while keeping facial features unchanged.,10,0.99999,30,0.6364578604698180,0.18337388336658500,0.1056765545496900,0.925508298386093
+data/test/headshotclip.jpg,Render the person with a natural-looking buzzcut haircut in a realistic photographic style.,10,0.99999,30,0.6596564054489140,0.22056999802589400,0.023588840385942900,0.903815243860751
+data/test/headshotclip.jpg,"Change the subject's hairstyle to a buzzcut, ensuring the new hair matches lighting, background, and perspective.",10,0.99999,30,0.6228619813919070,0.24728578329086300,0.11338720544351800,0.983534970126288
