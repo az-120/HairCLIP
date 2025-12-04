@@ -100,7 +100,7 @@ if __name__ == "__main__":
     bgr = cv2.imread("data/test/IMG_2817.png")
     mask = get_editable_mask(bgr)
 
-    cv2.imwrite("data/test/mask_debug.png", mask)
+    cv2.imwrite("data/test/mask_debug.png", mask * 255)
 
     prompts = [
         "low taper fade",
@@ -128,11 +128,22 @@ if __name__ == "__main__":
     cv2.imwrite("data/test/mask_debug2.png", mask)
 
     prompts = [
-        "low taper fade",
-        "low taper",
-        "high taper fade",
-        "buzzcut haircut",
-        "photo of a person with a buzzcut hairstyle, high quality, realistic, detailed",
+        "buzzcut",
+        "buzzcut hairstyle",
+        "person with a buzzcut",
+        "photo of a person with a buzzcut hairstyle",
+        "portrait of a person with a buzzcut hairstyle",
+        "realistic person with a clean buzzcut hairstyle",
+        "close-up portrait of a person with a buzzcut haircut",
+        "high-detail portrait of a person with a buzzcut hairstyle, realistic skin texture",
+        "studio photo of a person with a sharp buzzcut haircut, dramatic lighting",
+        "ultra-realistic photo of a person with a very short buzzcut",
+        "cinematic portrait of a person with a buzzcut, shallow depth of field",
+        "person with freshly-trimmed buzzcut hair in natural lighting",
+        "The person in the image should now have a short buzzcut hairstyle.",
+        "Transform the subject’s hair into a clean buzzcut while keeping facial features unchanged.",
+        "Render the person with a natural-looking buzzcut haircut in a realistic photographic style.",
+        "Change the subject's hairstyle to a buzzcut, ensuring the new hair matches lighting, background, and perspective.",
     ]
 
     for i, pr in enumerate(prompts, 1):
