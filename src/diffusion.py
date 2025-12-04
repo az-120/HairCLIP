@@ -12,7 +12,7 @@ def load_model(device="cuda"):
         variant="fp16"
     ).to(device)
 
-    # TODO: pipe.enable_xformers_memory_efficient_attention()
+    pipe.enable_xformers_memory_efficient_attention()
     return pipe
 
 
