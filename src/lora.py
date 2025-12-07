@@ -48,24 +48,23 @@ class HairstylesDataset(Dataset):
 def add_lora_to_unet(unet, rank=8):
     lora_attn_procs = {}
 
-    for name, module in unet.named_modules():
-        if hasattr(module, "set_attn_processor") and hasattr(module, "processor"):
-            cfg = module.processor.config
+    for name, processor in unet.attn_processors.items():
+        hidden_size = processor.config.hidden_size
+        cross_dim = processor.config.cross_attention_dim
 
-            hidden_size = cfg.hidden_size
-            cross_dim = cfg.cross_attention_dim
-
-            lora_attn_procs[name] = LoRAAttnProcessor2_0(
-                hidden_size=hidden_size,
-                cross_attention_dim=cross_dim,
-                rank=rank,
-            )
+        lora_attn_procs[name] = LoRAAttnProcessor2_0(
+            hidden_size=hidden_size,
+            cross_attention_dim=cross_dim,
+            rank=rank,
+        )
 
     unet.set_attn_processor(lora_attn_procs)
 
     lora_params = []
     for proc in unet.attn_processors.values():
-        lora_params.extend(list(proc.parameters()))
+        for p in proc.parameters():
+            if p.requires_grad:
+                lora_params.append(p)
 
     return lora_params
 
