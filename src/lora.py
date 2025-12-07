@@ -47,14 +47,13 @@ class HairstylesDataset(Dataset):
 # LoRA Setup
 def add_lora_to_unet(unet, rank=8):
     lora_attn_procs = {}
+
     for name, module in unet.named_modules():
-        if hasattr(module, "set_attn_processor"):
-            try:
-                hidden_size = module.to_q.out_features
-                cross_dim = module.to_k.in_features
-            except AttributeError:
-                hidden_size = module.to_q.out_features
-                cross_dim = None
+        if hasattr(module, "set_attn_processor") and hasattr(module, "processor"):
+            cfg = module.processor.config
+
+            hidden_size = cfg.hidden_size
+            cross_dim = cfg.cross_attention_dim
 
             lora_attn_procs[name] = LoRAAttnProcessor2_0(
                 hidden_size=hidden_size,
@@ -206,7 +205,7 @@ def evaluate_lora(
 if __name__ == "__main__":
     train_lora_sdxl(
         train_data_dir="data/lora",
-        output_dir="lora-res-1",
+        output_dir="data/lora-res-1",
         lr=1e-4,
         rank=8,
         epochs=3,
