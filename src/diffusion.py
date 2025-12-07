@@ -103,22 +103,15 @@ if __name__ == "__main__":
     cv2.imwrite("data/test/mask_debug.png", mask * 255)
 
     prompts = [
-        "buzzcut",
-        "buzzcut hairstyle",
-        "person with a buzzcut",
-        "photo of a person with a buzzcut hairstyle",
-        "portrait of a person with a buzzcut hairstyle",
-        "realistic person with a clean buzzcut hairstyle",
-        "close-up portrait of a person with a buzzcut haircut",
-        "high-detail portrait of a person with a buzzcut hairstyle, realistic skin texture",
-        "studio photo of a person with a sharp buzzcut haircut, dramatic lighting",
-        "ultra-realistic photo of a person with a very short buzzcut",
-        "cinematic portrait of a person with a buzzcut, shallow depth of field",
-        "person with freshly-trimmed buzzcut hair in natural lighting",
-        "The person in the image should now have a short buzzcut hairstyle.",
-        "Transform the subject’s hair into a clean buzzcut while keeping facial features unchanged.",
-        "Render the person with a natural-looking buzzcut haircut in a realistic photographic style.",
-        "Change the subject's hairstyle to a buzzcut, ensuring the new hair matches lighting, background, and perspective.",
+        "wolf cut",
+        "person with a wolf cut hairstyle",
+        "edgar cut",
+        "mod cut",
+        "warrior cut",
+        "person with a warrior cut hairstyle",
+        "person with twists hairstyle",
+        "waves hairstyle",
+        "modern mullet hairstyle"
     ]
 
     for i, pr in enumerate(prompts, 1):
