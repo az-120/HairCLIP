@@ -51,7 +51,6 @@ data/raw/**
 *.ckpt
 *.pt
 *.pth
-*.safetensors
 
 # Videos / rendered assets
 videos/**
