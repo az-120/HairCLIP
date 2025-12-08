@@ -48,23 +48,35 @@ class HairstylesDataset(Dataset):
 def add_lora_to_unet(unet, rank=8):
     lora_attn_procs = {}
 
-    for name, processor in unet.attn_processors.items():
-        hidden_size = processor.config.hidden_size
-        cross_dim = processor.config.cross_attention_dim
+    for name, proc in unet.attn_processors.items():
+        if name.endswith("attn1.processor"):
+            cross_attention_dim = None
+        else:
+            cross_attention_dim = unet.config.cross_attention_dim
+
+        if name.startswith("mid_block"):
+            hidden_size = unet.config.block_out_channels[-1]
+        elif name.startswith("up_blocks"):
+            block_id = int(name.split(".")[1])
+            hidden_size = list(reversed(unet.config.block_out_channels))[block_id]
+        elif name.startswith("down_blocks"):
+            block_id = int(name.split(".")[1])
+            hidden_size = unet.config.block_out_channels[block_id]
+        else:
+            # shouldn’t really happen, but just in case
+            continue
 
         lora_attn_procs[name] = LoRAAttnProcessor2_0(
             hidden_size=hidden_size,
-            cross_attention_dim=cross_dim,
+            cross_attention_dim=cross_attention_dim,
             rank=rank,
         )
 
     unet.set_attn_processor(lora_attn_procs)
 
     lora_params = []
-    for proc in unet.attn_processors.values():
-        for p in proc.parameters():
-            if p.requires_grad:
-                lora_params.append(p)
+    for p in unet.attn_processors.values():
+        lora_params.extend(list(p.parameters()))
 
     return lora_params
 
@@ -80,7 +92,7 @@ def train_lora_sdxl(
     batch_size=2,
     epochs=2
 ):
-    device = "cuda"
+    device = "mps"
     os.makedirs(output_dir, exist_ok=True)
 
     pipe = StableDiffusionXLPipeline.from_pretrained(
@@ -97,7 +109,7 @@ def train_lora_sdxl(
     pipe.unet.requires_grad_(False)
 
     # Add LoRA to UNet
-    lora_params = add_lora_to_unet(pipe.unet, rank=rank).to(device)
+    lora_params = add_lora_to_unet(pipe.unet, rank=rank)
     optimizer = torch.optim.AdamW(lora_params, lr=lr)
 
     dataset = HairstylesDataset(train_data_dir, image_size)
@@ -174,7 +186,7 @@ def evaluate_lora(
     import numpy as np
     import cv2
 
-    device = "cuda"
+    device = "mps"
 
     pipe = StableDiffusionXLPipeline.from_pretrained(
         pretrained,
