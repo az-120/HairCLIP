@@ -1,6 +1,6 @@
 import csv
 import cv2
-from diffusion import run_diffusion
+from run_inpainting import run_diffusion
 from masking import get_editable_mask
 from metrics import identity_score, prompt_score, locality_score
 
