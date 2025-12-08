@@ -12,7 +12,7 @@ def load_model(device="cuda"):
         variant="fp16"
     ).to(device)
 
-    pipe.load_lora_weights("models/pytorch_lora_weights.safetensors")
+    pipe.load_lora_weights("./models", weight_name="pytorch_lora_weights.safetensors")
 
     pipe.enable_xformers_memory_efficient_attention()
     return pipe
