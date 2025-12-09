@@ -105,15 +105,10 @@ if __name__ == "__main__":
     cv2.imwrite("data/test/mask_debug.png", mask * 255)
 
     prompts = [
-        "wolf cut",
-        "person with a wolf cut hairstyle",
-        "edgar cut",
-        "mod cut",
-        "warrior cut",
-        "person with a warrior cut hairstyle",
-        "person with twists hairstyle",
-        "waves hairstyle",
-        "modern mullet hairstyle"
+        "a picture of a person with a mullet hairstyle",
+        "a picture of a person with a wolfcut hairstyle",
+        "a picture of a person with a low taper fade hairstyle",
+        "a picture of a person with a buzzcut hairstyle"
     ]
 
     for i, pr in enumerate(prompts, 1):
