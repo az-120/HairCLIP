@@ -147,7 +147,7 @@ if __name__ == "__main__":
     bgr = cv2.imread("data/test/headshotclip.jpg")
     mask = get_editable_mask(bgr)
 
-    cv2.imwrite("data/test/mask_debug.png", mask * 255)
+    cv2.imwrite("data/test/Tanium_Badge.jpeg", mask * 255)
 
     prompts = [
         "a picture of a person with a mullet hairstyle",
