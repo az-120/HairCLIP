@@ -18,13 +18,10 @@ This document provides credit for all resources used in HairCLIP.
 
 ## Datasets
 
-- TODO
+- FFHQ (Flickr-Faces-HQ) Dataset - contains 70,000 high quality images of various faces without image captions
+- Self curated dataset for finetuning hairstyles the model was less confident on (afro, balayage, bob cut, butterfly cut, cornrows, fade, mullet, pixie cut, warrior cut, waves, wolf cut)
 
 ## Pretrained Models
 
 - MediaPipe Image Segmenter model: https://ai.google.dev/edge/mediapipe/solutions/vision/image_segmenter
 - Stable Diffusion XL Inpainting: https://huggingface.co/diffusers/stable-diffusion-xl-1.0-inpainting-0.1
-
-## Media & Assets
-
-- TODO
