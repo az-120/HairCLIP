@@ -7,21 +7,24 @@ This document provides credit for all resources used in HairCLIP.
 - Generating template files and initial structure of the project.
 - Updating the .gitignore file.
 - Adding docstrings to files.
+- Creating the csv output file in `src/hyperparameter_selection.py`.
+- Creating the prompt engineering evaluation markdown in `data/prompt_engineering/prompts.md`.
 
 ## Third-Party Libraries
 
-List every external dependency beyond the standard library. Include name, version, license, and how it is used. Example:
-
-- `torch==2.2.0` – BSD-3-Clause – Used for training and inference (`src/train.py`, `src/infer.py`).
+- PIL, cv2, numpy: used for image processing.
+- HuggingFace Diffusers: for stable diffusion pipelining and LoRA fine-tuning (https://github.com/huggingface/diffusers/tree/main/examples/text_to_image).
+- insightface: identity similarity metric.
 
 ## Datasets
 
-- ❗ Provide dataset names, sources/URLs, licenses, and whether you host a processed copy.
+- TODO
 
 ## Pretrained Models
 
 - MediaPipe Image Segmenter model: https://ai.google.dev/edge/mediapipe/solutions/vision/image_segmenter
+- Stable Diffusion XL Inpainting: https://huggingface.co/diffusers/stable-diffusion-xl-1.0-inpainting-0.1
 
 ## Media & Assets
 
-- ❗ Credit any icons, demo images, or video/audio assets included in `videos/` or elsewhere.
+- TODO
