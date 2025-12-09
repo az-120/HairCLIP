@@ -52,10 +52,6 @@ data/raw/**
 *.pt
 *.pth
 
-# Videos / rendered assets
-videos/**
-!videos/.gitkeep
-
 # Caches for ML tooling
 torch_cache/
 torch_extensions/
