@@ -1,4 +1,4 @@
-# HairCLIP
+# 💈 HairCLIP
 
 [Deployed Web App](https://huggingface.co/spaces/arthurzhao120/HairCLIP)
 
@@ -29,8 +29,8 @@ The inputted image is first run through a Mediapipe segmentation model. The hair
 
 ## Video Links
 
-- Demo video: ❗ add public link (e.g., Google Drive or YouTube) showcasing end-to-end usage.
-- Technical walkthrough: ❗ add link explaining architecture, training strategy, and evaluation.
+- [Project Demo](https://youtu.be/nwWj13temB8)
+- [Technical Walkthrough](https://youtu.be/rmfARXabixY)
 
 ## Evaluation
 
