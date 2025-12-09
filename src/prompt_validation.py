@@ -1,13 +1,21 @@
-import re
+import os
 from typing import Dict, List
+import torch
+import clip
+from pathlib import Path
+import re
 
-# Hairstyle list
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+#Hairstyle prompts for similarity check
 VALID_HAIRSTYLES = {
-    "buzzcut", "fade", "taper", "crew cut", "undercut", "mullet",
+    "buzz cut", "fade", "taper", "crew cut", "undercut", "mullet",
     "pompadour", "quiff", "curtain bangs", "wolf cut", "bob", "pixie",
     "layered cut", "shag", "afro", "braids", "cornrows", "twists", "locs", 
     "dreadlocks", "balayage", "cornrows",  "warrior cut", "butterfly cut", "flow", "part", "hair"
 }
+
+SIM_THRESHOLD = 0.3  # minimum cosine similarity to accept prompt
 
 # Non-hair edits to block
 NON_HAIR_KEYWORDS = {
@@ -16,73 +24,45 @@ NON_HAIR_KEYWORDS = {
     "make me look", "change my", "fix my", "reshape", "body", "muscle", "height"
 }
 
-def validate_prompt(text: str) -> Dict[str, object]:
+
+print("Loading CLIP model...")
+clip_model, clip_preprocess = clip.load("ViT-B/32", device=DEVICE)
+clip_model.eval()
+
+with torch.no_grad():
+    canonical_tokens = clip.tokenize(CANONICAL_HAIRSTYLES).to(DEVICE)
+    canonical_embeddings = clip_model.encode_text(canonical_tokens)
+    canonical_embeddings /= canonical_embeddings.norm(dim=-1, keepdim=True)
+
+
+def clip_validate_prompt(prompt: str) -> str:
     """
-    Combined validation:
-    1. General input quality
-    2. Hairstyle presence
-    3. Blocks non-hair edits
-    4. Provides recommendations/warnings
+    Return the prompt only if it passes validation.
     """
-    errors: List[str] = []
-    warnings: List[str] = []
-    matched_style = None
 
-    if not isinstance(text, str):
-        raise ValueError("Input must be a string.")
+    if not isinstance(prompt, str) or len(prompt.strip()) == 0:
+        raise ValueError("Prompt must be a non-empty string.")
 
-    text = text.strip()
+    p = prompt.strip().lower()
 
-    if len(text) == 0:
-        raise ValueError("Input text cannot be empty.")
-
-    if len(text) < 5:
-        raise ValueError("Input text is too short. Please provide at least 20 characters.")
-
-    if len(text) > 20000:
+    if len(p) > 20000:
         raise ValueError("Input text is too long. Maximum allowed characters: 20,000.")
 
-    if len(set(text)) < 5:
-        raise ValueError("Input text appears invalid or low-quality.")
-
-    
-    p = text.lower()
-
-    
     for word in NON_HAIR_KEYWORDS:
         if word in p:
-            errors.append(
-                f"Prompt includes non-hair changes ('{word}'). Only hairstyle edits are allowed."
-            )
-            return {"valid": False, "errors": errors, "warnings": warnings, "style": None}
+            raise ValueError(f"Prompt includes non-hair edits ('{word}').")
 
-  
-    for style in VALID_HAIRSTYLES:
-        if style in p:
-            matched_style = style
-            break
+    with torch.no_grad():
+        tokenized = clip.tokenize([prompt]).to(DEVICE)
+        prompt_embedding = clip_model.encode_text(tokenized)
+        prompt_embedding /= prompt_embedding.norm(dim=-1, keepdim=True)
+        sims = (prompt_embedding @ canonical_embeddings.T).squeeze(0)
+        max_score = sims.max().item()
 
-    if matched_style is None:
-        errors.append("No recognizable hairstyle found in the prompt. Please specify a hairstyle.")
-        return {"valid": False, "errors": errors, "warnings": warnings, "style": None}
+    if max_score < SIM_THRESHOLD:
+        raise ValueError(f"Prompt too dissimilar from recognized hairstyle prompts (max similarity {max_score:.2f}).")
 
-   -
-    recommended_pattern = r"give me (a |an )?" + re.escape(matched_style)
-    if not re.search(recommended_pattern, p):
-        warnings.append(
-            "Consider using the format 'Give me a <hairstyle> hairstyle' to make prompts clearer."
-        )
-
-   
-    if p.count("and") + p.count(",") > 1:
-        warnings.append("Prompt may contain multiple topics; consider keeping it focused on one hairstyle.")
-
-    return {
-        "valid": True,
-        "errors": errors,
-        "warnings": warnings,
-        "style": matched_style
-    }
+    return prompt
 
 
 if __name__ == "__main__":
@@ -93,13 +73,10 @@ if __name__ == "__main__":
         "Give me blue eyes and a pixie cut",
         "Try a braid and a bun",
         "I'd like a mullet, please",
-        "aaaaaaaaaaaaaaaaaaaa",  
-        "Short"  
+        "Short hair",
+        "aaaaaaaaaaaaaaaaaaaa"
     ]
 
     for prompt in test_prompts:
-        try:
-            result = validate_prompt(prompt)
-            print(f"Prompt: '{prompt}'\nResult: {result}\n")
-        except ValueError as e:
-            print(f"Prompt: '{prompt}'\nValidation Error: {e}\n")
+        result = clip_validate_prompt(prompt)
+        print(f"Prompt: '{prompt}'\nResult: {result}\n")
