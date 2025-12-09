@@ -30,7 +30,7 @@ clip_model, clip_preprocess = clip.load("ViT-B/32", device=DEVICE)
 clip_model.eval()
 
 with torch.no_grad():
-    canonical_tokens = clip.tokenize(CANONICAL_HAIRSTYLES).to(DEVICE)
+    canonical_tokens = clip.tokenize(VALID_HAIRSTYLES).to(DEVICE)
     canonical_embeddings = clip_model.encode_text(canonical_tokens)
     canonical_embeddings /= canonical_embeddings.norm(dim=-1, keepdim=True)
 
