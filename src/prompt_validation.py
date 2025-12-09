@@ -72,6 +72,17 @@ def is_valid_hairstyle_prompt(prompt: str, threshold: float = 0.333):
     best_name, score = best_hairstyle_match(prompt)
     return score >= threshold, best_name, score
 
+def explain_similarity(prompt: str, top_k: int = 10):
+    """Return the top-K most similar hairstyles with scores."""
+    emb = embed_texts([prompt])
+    sims = torch.matmul(CANONICAL_EMBEDS, emb[0])
+
+    scores = [
+        (VALID_HAIRSTYLES[i], float(sims[i].item()))
+        for i in range(len(VALID_HAIRSTYLES))
+    ]
+    scores.sort(key=lambda x: x[1], reverse=True)
+    return scores[:top_k]
 
 if __name__ == "__main__":
     tests = [
@@ -105,8 +116,9 @@ if __name__ == "__main__":
 
     print("\n=== PROMPT VALIDATION TESTS ===\n")
     for t in tests:
-        is_valid, best, score = is_valid_hairstyle_prompt(t, threshold=0.30)
-        print(f"Prompt: {t!r}")
-        print(f"  → is_valid: {is_valid}")
-        print(f"  → best match: {best}  (score={score:.3f})")
-        print()
+      is_valid, best, score = is_valid_hairstyle_prompt(t, threshold=0.30)
+      top_matches = explain_similarity(t, top_k=5)
+      print(f"Prompt: {t!r}")
+      print(f" → is_valid: {is_valid}")
+      print(f" → best match: {best} (score={score:.3f})")
+      print(f" → top matches: {top_matches}\n")
