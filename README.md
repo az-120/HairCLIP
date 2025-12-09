@@ -4,6 +4,9 @@
 
 HairCLIP lets users upload or take an image and preview various hairstyles using text prompts.
 
+Sample Output (replace with your own once generated):
+![HairCLIP Preview Example](docs/hairclippreview.png)
+
 
 ## What it Does
 
@@ -23,8 +26,6 @@ The inputted image is first run through a Mediapipe segmentation model. The hair
 6. Follow the instructions in this notebook, making sure to update the repo name and branch that you'll be using.
 7. Running the first 9 code cells will transform your inputted image based on the prompts. In the 9th cell, make sure to update the number of prompts the outputter iterates through.
 
-Sample Output (replace with your own once generated):
-![Sample hairstyle preview](docs/sample_output.png)
 
 ## Video Links
 
