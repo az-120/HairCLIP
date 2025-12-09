@@ -144,7 +144,7 @@ def run_diffusion(
 if __name__ == "__main__":
     from masking import get_editable_mask
 
-    bgr = cv2.imread("data/test/headshotclip.jpg")
+    bgr = cv2.imread("data/test/steven.png")
     mask = get_editable_mask(bgr)
 
     cv2.imwrite("data/test/mask_debug.png", mask * 255)
