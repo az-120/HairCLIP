@@ -1,82 +1,112 @@
-import os
-from typing import Dict, List
 import torch
-import clip
-from pathlib import Path
-import re
+import torch.nn.functional as F
+from transformers import AutoTokenizer, AutoModel
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-#Hairstyle prompts for similarity check
-VALID_HAIRSTYLES = {
+VALID_HAIRSTYLES = sorted({
     "buzz cut", "fade", "taper", "crew cut", "undercut", "mullet",
     "pompadour", "quiff", "curtain bangs", "wolf cut", "bob", "pixie",
-    "layered cut", "shag", "afro", "braids", "cornrows", "twists", "locs", 
-    "dreadlocks", "balayage", "cornrows",  "warrior cut", "butterfly cut", "flow", "part", "hair"
-}
-
-SIM_THRESHOLD = 0.3  # minimum cosine similarity to accept prompt
-
-# Non-hair edits to block
-NON_HAIR_KEYWORDS = {
-    "face", "nose", "eyes", "lips", "jaw", "chin", "cheek", "skin",
-    "color", "race", "ethnicity", "younger", "older", "age", "gender",
-    "make me look", "change my", "fix my", "reshape", "body", "muscle", "height"
-}
+    "layered cut", "shag", "afro", "braids", "cornrows", "twists", "locs",
+    "dreadlocks", "balayage", "warrior cut", "butterfly cut", "flow", "part",
+    "hair", "side part", "middle part", "comb over", "mohawk", "faux hawk",
+    "top knot", "man bun", "bob cut", "lob", "fringe", "bangs",
+    "short hair", "medium length hair", "long hair", "curly hair",
+    "wavy hair", "straight hair"
+})
 
 
-print("Loading CLIP model...")
-clip_model, clip_preprocess = clip.load("ViT-B/32", device=DEVICE)
-clip_model.eval()
+# Sentence Embedding Model
+MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
-with torch.no_grad():
-    canonical_tokens = clip.tokenize(CANONICAL_HAIRSTYLES).to(DEVICE)
-    canonical_embeddings = clip_model.encode_text(canonical_tokens)
-    canonical_embeddings /= canonical_embeddings.norm(dim=-1, keepdim=True)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model = AutoModel.from_pretrained(MODEL_NAME).to(device)
+model.eval()
 
 
-def clip_validate_prompt(prompt: str) -> str:
-    """
-    Return the prompt only if it passes validation.
-    """
-
-    if not isinstance(prompt, str) or len(prompt.strip()) == 0:
-        raise ValueError("Prompt must be a non-empty string.")
-
-    p = prompt.strip().lower()
-
-    if len(p) > 20000:
-        raise ValueError("Input text is too long. Maximum allowed characters: 20,000.")
-
-    for word in NON_HAIR_KEYWORDS:
-        if word in p:
-            raise ValueError(f"Prompt includes non-hair edits ('{word}').")
-
+def embed_texts(texts):
     with torch.no_grad():
-        tokenized = clip.tokenize([prompt]).to(DEVICE)
-        prompt_embedding = clip_model.encode_text(tokenized)
-        prompt_embedding /= prompt_embedding.norm(dim=-1, keepdim=True)
-        sims = (prompt_embedding @ canonical_embeddings.T).squeeze(0)
-        max_score = sims.max().item()
+        encoded = tokenizer(
+            texts,
+            padding=True,
+            truncation=True,
+            max_length=64,
+            return_tensors="pt"
+        ).to(device)
 
-    if max_score < SIM_THRESHOLD:
-        raise ValueError(f"Prompt too dissimilar from recognized hairstyle prompts (max similarity {max_score:.2f}).")
+        model_out = model(**encoded)
 
-    return prompt
+        token_embeddings = model_out.last_hidden_state
+        attention_mask = encoded.attention_mask.unsqueeze(-1)
+
+        summed = (token_embeddings * attention_mask).sum(dim=1)
+        counts = attention_mask.sum(dim=1).clamp(min=1)
+        embeddings = summed / counts
+
+        embeddings = F.normalize(embeddings, p=2, dim=1)
+        return embeddings
+
+
+CANONICAL_PHRASES = [f"a {name} hairstyle" for name in VALID_HAIRSTYLES]
+CANONICAL_EMBEDS = embed_texts(CANONICAL_PHRASES)
+
+
+def best_hairstyle_match(prompt: str):
+    if prompt is None:
+        return None, 0.0
+
+    cleaned = prompt.strip()
+    if not cleaned:
+        return None, 0.0
+
+    emb = embed_texts([cleaned])
+    sims = torch.matmul(CANONICAL_EMBEDS, emb[0])
+    best_idx = int(torch.argmax(sims).item())
+    best_score = float(sims[best_idx].item())
+    best_name = VALID_HAIRSTYLES[best_idx]
+
+    return best_name, best_score
+
+
+def is_valid_hairstyle_prompt(prompt: str, threshold: float = 0.333):
+    best_name, score = best_hairstyle_match(prompt)
+    return score >= threshold, best_name, score
 
 
 if __name__ == "__main__":
-    test_prompts = [
-        "Give me a fade hairstyle",
-        "I want a wolf cut",
-        "Make my jawline sharper and give me a bob",
-        "Give me blue eyes and a pixie cut",
-        "Try a braid and a bun",
-        "I'd like a mullet, please",
-        "Short hair",
-        "aaaaaaaaaaaaaaaaaaaa"
+    tests = [
+        # clearly valid
+        "buzz cut",
+        "give me a buzzcut",
+        "long wavy hair",
+        "I want an afro hairstyle",
+        "wolfcut",
+        "make my hair into curtain bangs",
+        "short taper fade",
+        "curly bob",
+        "mullet please",
+
+        # ambiguous / borderline
+        "make me look older",
+        "cleaner haircut",
+        "better hair",
+        "more volume",
+        "change my style",
+
+        # invalid (should fail)
+        "turn me into an oompa loompa",
+        "make me look like Shrek",
+        "give me a lightsaber",
+        "put me in a tuxedo",
+        "blue background",
+        "add a moustache",
+        "banana",
     ]
 
-    for prompt in test_prompts:
-        result = clip_validate_prompt(prompt)
-        print(f"Prompt: '{prompt}'\nResult: {result}\n")
+    print("\n=== PROMPT VALIDATION TESTS ===\n")
+    for t in tests:
+        is_valid, best, score = is_valid_hairstyle_prompt(t, threshold=0.30)
+        print(f"Prompt: {t!r}")
+        print(f"  → is_valid: {is_valid}")
+        print(f"  → best match: {best}  (score={score:.3f})")
+        print()
