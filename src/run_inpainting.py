@@ -4,8 +4,14 @@ import cv2
 from PIL import Image
 from diffusers import AutoPipelineForInpainting
 
+_cached_pipe = None
 
-def load_model(device="cuda"):
+def load_model(device="cuda", force_reload=False):
+    global _cached_pipe
+    
+    if _cached_pipe is not None and not force_reload:
+        return _cached_pipe
+    
     pipe = AutoPipelineForInpainting.from_pretrained(
         "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
         torch_dtype=torch.float16,
@@ -15,6 +21,8 @@ def load_model(device="cuda"):
     pipe.load_lora_weights("models", weight_name="pytorch_lora_weights.safetensors")
 
     pipe.enable_xformers_memory_efficient_attention()
+    
+    _cached_pipe = pipe
     return pipe
 
 
@@ -112,6 +120,7 @@ def run_diffusion(
         output_bgr: edited image in BGR format
     """
 
+    # Load model (will use cached version if already loaded)
     pipe = load_model()
 
     rgb = cv2.cvtColor(orig_bgr, cv2.COLOR_BGR2RGB)
