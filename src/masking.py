@@ -42,22 +42,27 @@ def expand_downward(mask, pixels):
 
 def get_editable_mask(image_bgr, expand_px=200):
     cls_mask = get_multiclass_mask(image_bgr)
+    h, w = image_bgr.shape[:2]
+    min_dim = min(h, w)
 
     hair = (cls_mask == 1).astype(np.uint8)
     face = (cls_mask == 3).astype(np.uint8)
     body = (cls_mask == 2).astype(np.uint8)
 
     # Expand the hair mask for haircuts that grow hair
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (expand_px, expand_px))
+    expand_size = int(expand_px * min_dim / 1024) if expand_px else int(200 * min_dim / 1024)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (expand_size, expand_size))
     dilated = cv2.dilate(hair, kernel, iterations=1)
 
     # Expand downward because above don't really cover longer longer hair
-    downward = expand_downward(hair, 1500)
+    downward_px = int(1500 * h / 2048)
+    downward = expand_downward(hair, downward_px)
 
     expanded = np.logical_or(dilated, downward).astype(np.uint8)
 
     # Slightly erode face mask to account for hair falling on face
-    face_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (100, 100))
+    face_kernel_size = int(100 * min_dim / 1024)
+    face_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (face_kernel_size, face_kernel_size))
     shrunken_face = cv2.erode(face, face_kernel, iterations=1)
 
     # Subtract out the face & body
@@ -69,7 +74,7 @@ def get_editable_mask(image_bgr, expand_px=200):
 
 # Test
 if __name__ == "__main__":
-    img = cv2.imread("data/test/headshotclip.jpg")
+    img = cv2.imread("data/test/badres.jpeg")
     mask = get_editable_mask(img)
 
     cv2.imwrite("data/test/multimask.png", mask * 255)
