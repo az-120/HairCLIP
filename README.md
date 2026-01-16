@@ -15,7 +15,7 @@ The inputted image is first run through a Mediapipe segmentation model. The hair
 
 ### User Interface
 
-1. Head to https://huggingface.co/spaces/arthurzhao120/HairCLIP, upload/take/paste an image, enter a hairstyle in the textbox, and click generate! (Note to grader: if the HuggingFace Space is down, email adz6@duke.edu and I'll try to get it up as quick as possible).
+1. Head to https://huggingface.co/spaces/arthurzhao120/HairCLIP, upload/take/paste an image, enter a hairstyle in the textbox, and click generate!
 
 ### Manually on Local (harder to replicate here, not sure if necessary since we have the UI)
 
